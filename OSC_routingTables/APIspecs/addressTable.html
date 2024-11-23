@@ -1,1 +1,875 @@
 
+<!DOCTYPE html>
+<html lang="">
+  <head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>OSC Table</title>
+    <link rel="stylesheet" href="style.css">
+    <script src="script.js" defer></script>
+</head>
+
+
+<!-- help from these sites:
+https://dev.to/speaklouder/how-to-apply-sorting-on-tables-in-html-using-javascript-sortable-paginated-tables-590g
+https://www.tablesgenerator.com/html_tables
+-->
+<body>
+  <table id="data-table"><thead>
+    <tr>
+      <th class="pointer" onclick="sortTable(0)">TAB↓</th>
+      <th class="pointer" onclick="sortTable(1)">FEATURE↓</th>
+      <th class="pointer" onclick="sortTable(2)">ADDRESS↓</th>
+      <th class="pointer" onclick="sortTable(3)">TYPE↓</th>
+      <th class="pointer" onclick="sortTable(4)">VALUES↓</th>
+      <th class="pointer" onclick="sortTable(5)">NOTES↓</th>
+    </tr></thead>
+  <tbody>
+    <tr>
+      <td></td>
+      <td></td>
+      <td></td>
+      <td></td>
+      <td></td>
+      <td></td>
+    </tr>
+
+    <tr>
+      <td>01 MIX</td>
+      <td>change color correction mode</td>
+      <td>colCorDD</td>
+      <td>dropdown menu</td>
+      <td>{<br>&nbsp;&nbsp;"gamma": "gamma",<br>&nbsp;&nbsp;"bright": "brightness",<br>&nbsp;&nbsp;"contrast": "contrast",<br>&nbsp;&nbsp;"saturation": "saturation",<br>&nbsp;&nbsp;"hue": "hue",<br>&nbsp;&nbsp;"posterize": "posterize",<br>&nbsp;&nbsp;"threshold": "threshold",<br>&nbsp;&nbsp;"invert": "invert"<br>}</td>
+      <td></td>
+    </tr>
+    <tr>
+      <td>01 MIX</td>
+      <td>change selection mode</td>
+      <td>addrSwitch</td>
+      <td>switch button</td>
+      <td>{<br>&nbsp;&nbsp;"Index\n#": "#",<br>&nbsp;&nbsp;"Batch\n#": "batch#",<br>&nbsp;&nbsp;"All": "all",<br>&nbsp;&nbsp;"Current": "current",<br>&nbsp;&nbsp;"Selec\ntion": "selection",<br>&nbsp;&nbsp;"by\nName": "byName"<br>}</td>
+      <td></td>
+    </tr>
+    <tr>
+      <td>01 MIX</td>
+      <td>save as cue</td>
+      <td>cueSaveBtn_Mix</td>
+      <td>push button</td>
+      <td>0, 1</td>
+      <td></td>
+    </tr>
+    <tr>
+      <td>01 MIX</td>
+      <td>delete last cue</td>
+      <td>cueSaveBtn_Mix1</td>
+      <td>push button</td>
+      <td>0, 1</td>
+      <td></td>
+    </tr>
+    <tr>
+      <td>01 MIX</td>
+      <td>change bank </td>
+      <td>bankSw_MIX</td>
+      <td>switch button</td>
+      <td>{<br>&nbsp;&nbsp;"Bank 1": 1,<br>&nbsp;&nbsp;"Bank 2": 2,<br>&nbsp;&nbsp;"Bank 3": 3<br>}</td>
+      <td></td>
+    </tr>
+    <tr>
+      <td>01 MIX</td>
+      <td>target values for opacity animation</td>
+      <td>targetOpacRange</td>
+      <td>slider</td>
+      <td>0 to 1</td>
+      <td></td>
+    </tr>
+    <tr>
+      <td>01 MIX</td>
+      <td>animation speed value (ms)</td>
+      <td>fadeSpeedFader</td>
+      <td>slider</td>
+      <td>10 to 10010</td>
+      <td>101 steps </td>
+    </tr>
+    <tr>
+      <td>01 MIX</td>
+      <td>load vimix session</td>
+      <td>sssnDD_Mix</td>
+      <td>dropdown menu</td>
+      <td>depending on the vimix .mix files present in working directory</td>
+      <td></td>
+    </tr>
+    <tr>
+      <td>01 MIX</td>
+      <td>not signed to anything yet</td>
+      <td>masterKnob</td>
+      <td>knob</td>
+      <td>0, 1</td>
+      <td></td>
+    </tr>
+    <tr>
+      <td>01 MIX</td>
+      <td>fade in/out whole scene</td>
+      <td>masterFader</td>
+      <td>slider</td>
+      <td>1, 0</td>
+      <td></td>
+    </tr>
+    <tr>
+      <td>01 MIX</td>
+      <td>play/pause all</td>
+      <td>PP_All</td>
+      <td>toggle button</td>
+      <td>0, 1</td>
+      <td></td>
+    </tr>
+    <tr>
+      <td>01 MIX</td>
+      <td>start fade in/out animation of whole scene with given target values</td>
+      <td>masterFade_Mix</td>
+      <td>toggle button</td>
+      <td>0, 1</td>
+      <td></td>
+    </tr>
+
+    <tr>
+      <td>01 MIX (“index” and “batch” view)</td>
+      <td>CC on/off </td>
+      <td>colCorMatrix/*colCorMatrix1/*<br>colCorMatrix2/*</td>
+      <td>toggle buttons</td>
+      <td>0, 1</td>
+      <td>matrix: replace asterics * in address with according number starting from 0</td>
+    </tr>
+    <tr>
+      <td>01 MIX (“index” and “batch” view)</td>
+      <td>CC value</td>
+      <td>knobsMat/*<br>knobsMat1/*<br>knobsMat2/*</td>
+      <td>knobs</td>
+      <td>div. </td>
+      <td>matrix: replace asterics * in address with according number starting from 0</td>
+    </tr>
+    <tr>
+      <td>01 MIX (“index” and “batch” view)</td>
+      <td>flash a source</td>
+      <td>flashMat/*<br>flashMat1/*<br>flashMat2/*</td>
+      <td>push buttons</td>
+      <td>0, 1</td>
+      <td>matrix: replace asterics * in address with according number starting from 0</td>
+    </tr>
+    <tr>
+      <td>01 MIX (“index” and “batch” view)</td>
+      <td>change opacity of clip</td>
+      <td>mainMixMat/*<br>mainMixMat1/*<br>mainMixMat2/*</td>
+      <td>sliders</td>
+      <td>-0.35&nbsp;&nbsp;to 1</td>
+      <td>matrix: replace asterics * in address with according number starting from 0</td>
+    </tr>
+    <tr>
+      <td>01 MIX (“index” and “batch” view)</td>
+      <td>play/pause a source</td>
+      <td>playPauseMat/*<br>playPauseMat1/*<br>playPauseMat2/*</td>
+      <td>toggle buttons</td>
+      <td>0, 1</td>
+      <td>matrix: replace asterics * in address with according number starting from 0</td>
+    </tr>
+    <tr>
+      <td>01 MIX (“index” and “batch” view)</td>
+      <td>start fade in/out animation with given target values</td>
+      <td>fadeMatrix/*<br>fadeMatrix1/*<br>fadeMatrix2/*</td>
+      <td>toggle buttons</td>
+      <td>0, 1</td>
+      <td>matrix: replace asterics * in address with according number starting from 0</td>
+    </tr>
+ 
+    <tr>
+      <td>01 MIX (common for “all”, “current”, “selection” and “byName” view)</td>
+      <td>deactivate CC&nbsp;&nbsp;(depending on addrSwitch) </td>
+      <td>deActCCBtn</td>
+      <td>toggle button</td>
+      <td>0, 1</td>
+      <td></td>
+    </tr>
+    <tr>
+      <td>01 MIX (common for “all”, “current”, “selection” and “byName” views)</td>
+      <td>CC value</td>
+      <td>CCKnob</td>
+      <td>knob</td>
+      <td>div.</td>
+      <td></td>
+    </tr>
+    <tr>
+      <td>01 MIX (common for “all”, “current”, “selection” and “byName” views)</td>
+      <td>reset CC</td>
+      <td>resetCCBtn</td>
+      <td>push button</td>
+      <td>0 1</td>
+      <td></td>
+    </tr>
+    <tr>
+      <td>01 MIX (common for “all”, “current”, “selection” and “byName” views)</td>
+      <td>change opacity </td>
+      <td>singleMix</td>
+      <td>slider</td>
+      <td>-0.35&nbsp;&nbsp;to 1</td>
+      <td></td>
+    </tr>
+    <tr>
+      <td>01 MIX (common for “all”, “current”, “selection” and “byName” views)</td>
+      <td>flash</td>
+      <td>flashBtn</td>
+      <td>push button</td>
+      <td>0, 1</td>
+      <td></td>
+    </tr>
+    <tr>
+      <td>01 MIX (common for “all”, “current”, “selection” and “byName” views)</td>
+      <td>play/pause</td>
+      <td>singlePPBtn</td>
+      <td>toggle button</td>
+      <td>0, 1</td>
+      <td></td>
+    </tr>
+    <tr>
+      <td>01 MIX (common for “all”, “current”, “selection” and “byName” views)</td>
+      <td>fade in/out with given target values</td>
+      <td>singleFadeBtn</td>
+      <td>toggle button</td>
+      <td>0, 1</td>
+      <td></td>
+    </tr>
+
+    <tr>
+      <td>01 MIX (only “current” view)</td>
+      <td>select current source</td>
+      <td>selector</td>
+      <td>switch button</td>
+      <td>depending on how many sources are loaded in Vimix, starting with {“id”: 0}...</td>
+      <td></td>
+    </tr>
+    <tr>
+      <td>01 MIX (only “current” view)</td>
+      <td>change play speed of source to given value </td>
+      <td>playSpeedBtnMix</td>
+      <td>push button</td>
+      <td>0, 1</td>
+      <td></td>
+    </tr>
+    <tr>
+      <td>01 MIX (only “current” view)</td>
+      <td>adjust play speed target (miltiplication)</td>
+      <td>playSpeedKnob</td>
+      <td>knob</td>
+      <td>0.1 to 5</td>
+      <td></td>
+    </tr>
+    <tr>
+      <td>01 MIX (only “current” view)</td>
+      <td>fast forward to given value</td>
+      <td>FFWDBtnMix</td>
+      <td>push button</td>
+      <td>0, 1</td>
+      <td></td>
+    </tr>
+    <tr>
+      <td>01 MIX (only “current” view)</td>
+      <td>adjust fast forward value</td>
+      <td>ffwdKnobMix</td>
+      <td>knob</td>
+      <td>10, 3000</td>
+      <td></td>
+    </tr>
+    <tr>
+      <td>01 MIX (only “current” view)</td>
+      <td>jump to certain point in clip<br>(percentage of total length of clip)</td>
+      <td>jumpBtnMix</td>
+      <td>push button</td>
+      <td>0, 1</td>
+      <td></td>
+    </tr>
+    <tr>
+      <td>01 MIX (only “current” view)</td>
+      <td>adjust percentage of clip length</td>
+      <td>jumpFaderMix</td>
+      <td>slider</td>
+      <td>0, 1</td>
+      <td></td>
+    </tr>
+ 
+    <tr>
+      <td>02 MIX_CUES</td>
+      <td>start CUE animation 1 - 14</td>
+      <td>CUESMat1_*</td>
+      <td>push buttons</td>
+      <td>0, 1</td>
+      <td>matrix: replace asterics * in address with according number starting from 0</td>
+    </tr>
+    <tr>
+      <td>02 MIX_CUES</td>
+      <td>start CUE animation 15- 28</td>
+      <td>CUESMat2_*</td>
+      <td>push buttons</td>
+      <td>0, 1</td>
+      <td>matrix: replace asterics * in address with according number starting from 0</td>
+    </tr>
+    <tr>
+      <td>02 MIX_CUES</td>
+      <td>start CUE animation 29 - 42</td>
+      <td>CUESMat3_*</td>
+      <td>push buttons</td>
+      <td>0, 1</td>
+      <td>matrix: replace asterics * in address with according number starting from 0</td>
+    </tr>
+
+    <tr>
+      <td>03 GEO</td>
+      <td>select current source</td>
+      <td>selectSwGeo</td>
+      <td>switch button</td>
+      <td>depending on how many sources are loaded in Vimix, starting with {“id”: 0}...</td>
+      <td></td>
+    </tr>
+    <tr>
+      <td>03 GEO</td>
+      <td>set X position</td>
+      <td>XKnob</td>
+      <td>knob</td>
+      <td>-4 to 4</td>
+      <td></td>
+    </tr>
+    <tr>
+      <td>03 GEO</td>
+      <td>set Y position</td>
+      <td>YKnob</td>
+      <td>knob</td>
+      <td>-2 to 2</td>
+      <td></td>
+    </tr>
+    <tr>
+      <td>03 GEO</td>
+      <td>toggle auto snapback of position</td>
+      <td>deActSnapBtn1</td>
+      <td>toggle button</td>
+      <td>0, 1</td>
+      <td></td>
+    </tr>
+    <tr>
+      <td>03 GEO</td>
+      <td>change width</td>
+      <td>XSizeKnob</td>
+      <td>knob</td>
+      <td>depending on choosen ratio, e.g. 100% ={<br>&nbsp;&nbsp;"min": -1,<br>&nbsp;&nbsp;"max": 1<br>}</td>
+      <td></td>
+    </tr>
+    <tr>
+      <td>03 GEO</td>
+      <td>change height</td>
+      <td>YSizeKnob</td>
+      <td>knob</td>
+      <td>depending on choosen ratio, e.g. 100% ={<br>&nbsp;&nbsp;"min": -1,<br>&nbsp;&nbsp;"max": 1<br>}</td>
+      <td></td>
+    </tr>
+    <tr>
+      <td>03 GEO</td>
+      <td>toggle auto snapback of size</td>
+      <td>deActSnapBtn2</td>
+      <td>toggle button</td>
+      <td>0, 1</td>
+      <td></td>
+    </tr>
+    <tr>
+      <td>03 GEO</td>
+      <td>set rotation</td>
+      <td>rotationKnobGeo</td>
+      <td>knob</td>
+      <td>-6.2832 to 6.2832</td>
+      <td></td>
+    </tr>
+    <tr>
+      <td>03 GEO</td>
+      <td>choose which transformation to animate</td>
+      <td>animSwitch</td>
+      <td>switch</td>
+      <td>{<br>&nbsp;&nbsp;"Position": "position",<br>&nbsp;&nbsp;"Size": "size",<br>&nbsp;&nbsp;"Rotation": "rotation"<br>}</td>
+      <td></td>
+    </tr>
+    <tr>
+      <td>03 GEO</td>
+      <td>lock start position value</td>
+      <td>lockPosStartGeoBtn</td>
+      <td>toggle button</td>
+      <td>0, 1</td>
+      <td></td>
+    </tr>
+    <tr>
+      <td>03 GEO</td>
+      <td>lock end position value</td>
+      <td>lockPosEndGeoBtn</td>
+      <td>toggle button</td>
+      <td>0, 1</td>
+      <td></td>
+    </tr>
+    <tr>
+      <td>03 GEO</td>
+      <td>lock start size value</td>
+      <td>lockSizeStartGeoBtn</td>
+      <td>toggle button</td>
+      <td>0, 1</td>
+      <td></td>
+    </tr>
+    <tr>
+      <td>03 GEO</td>
+      <td>lock end size value</td>
+      <td>lockSizeEndGeoBtn</td>
+      <td>toggle button</td>
+      <td>0, 1</td>
+      <td></td>
+    </tr>
+    <tr>
+      <td>03 GEO</td>
+      <td>lock start rotation value</td>
+      <td>lockRotStartGeoBtn</td>
+      <td>toggle button</td>
+      <td>0, 1</td>
+      <td></td>
+    </tr>
+    <tr>
+      <td>03 GEO</td>
+      <td>lock end rotation value</td>
+      <td>lockRotEndGeoBtn</td>
+      <td>toggle button</td>
+      <td>0, 1</td>
+      <td></td>
+    </tr>
+    <tr>
+      <td>03 GEO</td>
+      <td>play animation forward</td>
+      <td>startAnimGeo</td>
+      <td>push button</td>
+      <td>0, 1</td>
+      <td></td>
+    </tr>
+    <tr>
+      <td>03 GEO</td>
+      <td>play animation backward</td>
+      <td>revAnimGeo</td>
+      <td>push button</td>
+      <td>0, 1</td>
+      <td></td>
+    </tr>
+    <tr>
+      <td>03 GEO</td>
+      <td>play animation back and forth</td>
+      <td>bafAnimGeo</td>
+      <td>push button</td>
+      <td>0, 1</td>
+      <td></td>
+    </tr>
+
+    <tr>
+      <td>04 GEO_ACT</td>
+      <td>select current source</td>
+      <td>selectSwGeo1</td>
+      <td>switch button</td>
+      <td>depending on how many sources are loaded in Vimix, starting with {“id”: 0}...</td>
+      <td></td>
+    </tr>
+    <tr>
+      <td>04 GEO_ACT</td>
+      <td>set grab X and Y position</td>
+      <td>XYPadGrab</td>
+      <td>XY pad (nedds two values)</td>
+      <td>rangeX:{<br>&nbsp;&nbsp;"min": -4,<br>&nbsp;&nbsp;"max": 4<br>}<br>rangeY:<br>{<br>&nbsp;&nbsp;"min": -2,<br>&nbsp;&nbsp;"max": 2<br>}</td>
+      <td></td>
+    </tr>
+    <tr>
+      <td>04 GEO_ACT</td>
+      <td>toggle auto snapback of grab</td>
+      <td>deActSnapBtn3</td>
+      <td>toggle button</td>
+      <td>0, 1</td>
+      <td></td>
+    </tr>
+    <tr>
+      <td>04 GEO_ACT</td>
+      <td>play grab animation</td>
+      <td>grabBtn_ACT</td>
+      <td>push button</td>
+      <td>0, 1</td>
+      <td></td>
+    </tr>
+    <tr>
+      <td>04 GEO_ACT</td>
+      <td>toggle realtime view grab</td>
+      <td>rtGrabBtn</td>
+      <td>toggle button</td>
+      <td>0, 1</td>
+      <td></td>
+    </tr>
+    <tr>
+      <td>04 GEO_ACT</td>
+      <td>set turn value</td>
+      <td>rotationKnobGeo1</td>
+      <td>knob</td>
+      <td>-6.2832 to 6.2832</td>
+      <td></td>
+    </tr>
+    <tr>
+      <td>04 GEO_ACT</td>
+      <td>toggle realtime view turn</td>
+      <td>rtTurnBtn</td>
+      <td>toggle button</td>
+      <td>0, 1</td>
+      <td></td>
+    </tr>
+    <tr>
+      <td>04 GEO_ACT</td>
+      <td>toggle auto snapback of turn</td>
+      <td>deActSnapBtn5</td>
+      <td>toggle button</td>
+      <td>0, 1</td>
+      <td></td>
+    </tr>
+    <tr>
+      <td>04 GEO_ACT</td>
+      <td>play turn animation</td>
+      <td>turnBtn_ACT</td>
+      <td>push button</td>
+      <td>0, 1</td>
+      <td></td>
+    </tr>
+    <tr>
+      <td>04 GEO_ACT</td>
+      <td>set resize Width and Height</td>
+      <td>XYPadResize</td>
+      <td></td>
+      <td></td>
+      <td></td>
+    </tr>
+    <tr>
+      <td>04 GEO_ACT</td>
+      <td>toggle auto snapback of resize</td>
+      <td>deActSnapBtn4</td>
+      <td>toggle button</td>
+      <td>0, 1</td>
+      <td></td>
+    </tr>
+    <tr>
+      <td>04 GEO_ACT</td>
+      <td>play resize animation</td>
+      <td>resizeBtn_ACT</td>
+      <td>push button</td>
+      <td>0, 1</td>
+      <td></td>
+    </tr>
+    <tr>
+      <td>04 GEO_ACT</td>
+      <td>toggle realtime view turn</td>
+      <td>rtResizeBtn</td>
+      <td>toggle button</td>
+      <td>0, 1</td>
+      <td></td>
+    </tr>
+    <tr>
+      <td>04 GEO_ACT</td>
+      <td>reset source (position, rotation, size)</td>
+      <td>resetBtn_ACT</td>
+      <td>push button</td>
+      <td>0, 1</td>
+      <td></td>
+    </tr>
+
+    <tr>
+      <td>05 DEFORM</td>
+      <td>soon to come</td>
+      <td>cornerMovePad_DEF</td>
+      <td>soon</td>
+      <td>soon</td>
+      <td></td>
+    </tr>
+    <tr>
+      <td></td>
+      <td></td>
+      <td></td>
+      <td></td>
+      <td></td>
+      <td></td>
+    </tr>
+    <tr>
+      <td>06 LAYERS</td>
+      <td>select current source</td>
+      <td>selectSwLayers</td>
+      <td>switch button</td>
+      <td>depending on how many sources are loaded in Vimix, starting with {“id”: 0}...</td>
+      <td></td>
+    </tr>
+    <tr>
+      <td>06 LAYERS</td>
+      <td>set depth </td>
+      <td>depthMat_Layers/*</td>
+      <td>sliders</td>
+      <td>12 to 0</td>
+      <td>matrix: replace asterics * in address with according number starting from 0</td>
+    </tr>
+    <tr>
+      <td>06 LAYERS</td>
+      <td>syncronize depth with vimix</td>
+      <td>syncDepths</td>
+      <td>push button</td>
+      <td>0, 1</td>
+      <td></td>
+    </tr>
+    <tr>
+      <td>06 LAYERS</td>
+      <td>select blending mode</td>
+      <td>blendingDD_Layers/*</td>
+      <td>dropdowns</td>
+      <td>{<br>&nbsp;&nbsp;"Normal": "normal",<br>&nbsp;&nbsp;"Screen": "screen",<br>&nbsp;&nbsp;"Subtract": "subtract",<br>&nbsp;&nbsp;"Multiply": "multiply",<br>&nbsp;&nbsp;"Soft Light": "softLight",<br>&nbsp;&nbsp;"Hard Light": "hardLight",<br>&nbsp;&nbsp;"Soft Subtract": "softSubtract",<br>&nbsp;&nbsp;"Lighten Only": "lighten"<br>}</td>
+      <td>matrix: replace asterics * in address with according number starting from 0</td>
+    </tr>
+
+    <tr>
+      <td>07 CC</td>
+      <td>toggle CC on/off for selected source</td>
+      <td>onOffCCBtn_CC</td>
+      <td>toggle button</td>
+      <td>0, 1</td>
+      <td></td>
+    </tr>
+    <tr>
+      <td>07 CC</td>
+      <td>select current source</td>
+      <td>selectSwCC</td>
+      <td>switch button</td>
+      <td>depending on how many sources are loaded in Vimix, starting with {“id”: 0}...</td>
+      <td></td>
+    </tr>
+    <tr>
+      <td>07 CC</td>
+      <td>set CC values</td>
+      <td>knobsMatCC</td>
+      <td>knobs</td>
+      <td>depending on type of CC, for most of them:-1 to 1exceptions arehue: 0 to 1posterize: 0 to 256threshold: 0 to 1<br>invert: 0 to 3</td>
+      <td></td>
+    </tr>
+    <tr>
+      <td>07 CC</td>
+      <td>select Gamma Color</td>
+      <td>gammaCol_CC</td>
+      <td>color picker (needs three values)</td>
+      <td>{<br>&nbsp;&nbsp;"min": 0,<br>&nbsp;&nbsp;"max": 255<br>}</td>
+      <td></td>
+    </tr>
+    <tr>
+      <td>07 CC</td>
+      <td>reset all CC values to default</td>
+      <td>resetCCBtn_CC</td>
+      <td>push button</td>
+      <td>0, 1</td>
+      <td></td>
+    </tr>
+
+    <tr>
+      <td>08 FILTER</td>
+      <td>select current source</td>
+      <td>selectSwFilter</td>
+      <td>switch button</td>
+      <td>depending on how many sources are loaded in Vimix, starting with {“id”: 0}...</td>
+      <td></td>
+    </tr>
+    <tr>
+      <td>08 FILTER</td>
+      <td>choose filter</td>
+      <td>filterChoiceDD_FIL</td>
+      <td>dropdown</td>
+      <td>{<br>&nbsp;&nbsp;"None": "none",<br>&nbsp;&nbsp;"Delay": "delay",<br>&nbsp;&nbsp;"Resample": "resample",<br>&nbsp;&nbsp;"Blur": "blur",<br>&nbsp;&nbsp;"Sharpen": "sharpen",<br>&nbsp;&nbsp;"Smooth&amp;Noise": "smooth",<br>&nbsp;&nbsp;"Edge": "edge",<br>&nbsp;&nbsp;"Alpha": "alpha",<br>&nbsp;&nbsp;"Custom": "custom"<br>}</td>
+      <td></td>
+    </tr>
+    <tr>
+      <td>08 FILTER</td>
+      <td>set alpha value for choosen source</td>
+      <td>quickAlpha</td>
+      <td>knob</td>
+      <td>0 to 1</td>
+      <td></td>
+    </tr>
+    <tr>
+      <td>08 FILTER</td>
+      <td>play current filter forwards</td>
+      <td>startAnimFilter</td>
+      <td>push button</td>
+      <td>0, 1</td>
+      <td></td>
+    </tr>
+    <tr>
+      <td>08 FILTER</td>
+      <td>play current filter backwards</td>
+      <td>revAnimFilter</td>
+      <td>push button</td>
+      <td>0, 1</td>
+      <td></td>
+    </tr>
+    <tr>
+      <td>08 FILTER</td>
+      <td>play current filter back and forth</td>
+      <td>bafAnimFilter</td>
+      <td>push button</td>
+      <td>0, 1</td>
+      <td></td>
+    </tr>
+    <tr>
+      <td>08 FILTER</td>
+      <td>save current as Filter Cue</td>
+      <td>saveFilterCue</td>
+      <td>push button</td>
+      <td>0, 1</td>
+      <td></td>
+    </tr>
+    <tr>
+      <td>08 FILTER</td>
+      <td>delete last saved Filter Cue</td>
+      <td>saveFilterCue1</td>
+      <td>push button</td>
+      <td>0, 1</td>
+      <td></td>
+    </tr>
+
+    <tr>
+      <td>09 FILTER (only “custom” filter)</td>
+      <td>add another uniform</td>
+      <td>addToMatBtn</td>
+      <td>push button</td>
+      <td>0, 1</td>
+      <td></td>
+    </tr>
+    <tr>
+      <td>09 FILTER (only “custom” filter)</td>
+      <td>delete las uniform in list</td>
+      <td>eraseFromMatBtn</td>
+      <td>push button</td>
+      <td>0, 1</td>
+      <td></td>
+    </tr>
+
+    <tr>
+      <td>09 FILTER (only “Resample” filter)</td>
+      <td>choose algorithm for Resample filter</td>
+      <td>filterResampleDD_FIL</td>
+      <td>dropdown</td>
+      <td>{<br>&nbsp;&nbsp;"Double Res": "double",<br>&nbsp;&nbsp;"Half Res": "half",<br>&nbsp;&nbsp;"Quarter Res": "quarter"<br>}</td>
+      <td></td>
+    </tr>
+    <tr>
+      <td>09 FILTER (only “Blur” filter)</td>
+      <td>choose algorithm for Blur filter</td>
+      <td>filterBlurDD_FIL</td>
+      <td>dropdown</td>
+      <td>{<br>&nbsp;&nbsp;"Gaussian": "gaussian",<br>&nbsp;&nbsp;"Scattered": "scattered",<br>&nbsp;&nbsp;"Opening": "opening",<br>&nbsp;&nbsp;"Closing": "closing",<br>&nbsp;&nbsp;"Fast": "fast"<br>}</td>
+      <td></td>
+    </tr>
+    <tr>
+      <td>09 FILTER (only “Sharpen” filter)</td>
+      <td>choose algorithm for Sharpen filter</td>
+      <td>filterSharpenDD_FIL</td>
+      <td>dropdown</td>
+      <td>{<br>&nbsp;&nbsp;"Unsharp Mask": "unsharp",<br>&nbsp;&nbsp;"Convolusion": "convolution",<br>&nbsp;&nbsp;"Edge": "edge",<br>&nbsp;&nbsp;"White Hat": "white",<br>&nbsp;&nbsp;"Black Hat": "black"<br>}</td>
+      <td></td>
+    </tr>
+    <tr>
+      <td>09 FILTER (only “Smooth” filter)</td>
+      <td>choose algorithm for Smooth filter</td>
+      <td>filterSmoothDD_FIL</td>
+      <td>dropdown</td>
+      <td>{<br>&nbsp;&nbsp;"Bilateral": "bilateral",<br>&nbsp;&nbsp;"Kuwahara": "kuwahara",<br>&nbsp;&nbsp;"Opening": "opening",<br>&nbsp;&nbsp;"Closing": "closing",<br>&nbsp;&nbsp;"Erosion": "erosion",<br>&nbsp;&nbsp;"Dilation": "dilation",<br>&nbsp;&nbsp;"Denoise": "denoise",<br>&nbsp;&nbsp;"Noise Add": "noise",<br>&nbsp;&nbsp;"Grain Add": "grain"<br>}</td>
+      <td></td>
+    </tr>
+    <tr>
+      <td>09 FILTER (only “Edge” filter)</td>
+      <td>choose algorithm for Edge filter</td>
+      <td>filterEdgeDD_FIL</td>
+      <td>dropdown</td>
+      <td>{<br>&nbsp;&nbsp;"Sobel": "sobel",<br>&nbsp;&nbsp;"Freichen": "freichen",<br>&nbsp;&nbsp;"Thresholding": "thresholding",<br>&nbsp;&nbsp;"Contour": "contour"<br>}</td>
+      <td></td>
+    </tr>
+    <tr>
+      <td>09 FILTER (only “Alpha” filter)</td>
+      <td>choose algorithm for Alpha filter</td>
+      <td>filterAlphaDD_FIL1</td>
+      <td>dropdown</td>
+      <td>{<br>&nbsp;&nbsp;"ChromaKey": "chromakey",<br>&nbsp;&nbsp;"LumaKey": "lumakey",<br>&nbsp;&nbsp;"Fill": "fill"<br>}</td>
+      <td></td>
+    </tr>
+
+    <tr>
+      <td>10 FIL_CUES</td>
+      <td>play CUES 1 - 14 forward</td>
+      <td>filCuesMat1_FilCUES</td>
+      <td>push buttons</td>
+      <td>0, 1</td>
+      <td>matrix: replace asterics * in address with according number from <br>0 to 14</td>
+    </tr>
+    <tr>
+      <td>10 FIL_CUES</td>
+      <td>play CUES 1 - 14 backward</td>
+      <td>filCuesMat1-2_FilCUES</td>
+      <td>push buttons</td>
+      <td>0, 1</td>
+      <td>matrix: replace asterics * in address with according number from <br>15 to 28</td>
+    </tr>
+    <tr>
+      <td>10 FIL_CUES</td>
+      <td>play CUES 1 - 14 back and forth</td>
+      <td>filCuesMat1-3_FilCUES</td>
+      <td>push buttons</td>
+      <td>0, 1</td>
+      <td>matrix:replace asterics * in address with according number from<br>29 to 42</td>
+    </tr>
+    <tr>
+      <td>10 FIL_CUES</td>
+      <td>play CUES 15 - 28 forward</td>
+      <td>filCuesMat2_FilCUES</td>
+      <td>push buttons</td>
+      <td>0, 1</td>
+      <td>matrix: replace asterics * in address with according number from <br>0 to 14</td>
+    </tr>
+    <tr>
+      <td>10 FIL_CUES</td>
+      <td>play CUES 15 - 28 backward</td>
+      <td>filCuesMat2-2_FilCUES</td>
+      <td>push buttons</td>
+      <td>0, 1</td>
+      <td>matrix: replace asterics * in address with according number from <br>15 to 28</td>
+    </tr>
+    <tr>
+      <td>10 FIL_CUES</td>
+      <td>play CUES 15 - 28  back and forth</td>
+      <td>filCuesMat2-3_FilCUES</td>
+      <td>push buttons</td>
+      <td>0, 1</td>
+      <td>matrix:replace asterics * in address with according number from<br>29 to 42</td>
+    </tr>
+    <tr>
+      <td>10 FIL_CUES</td>
+      <td>play CUES 29 - 42 forward</td>
+      <td>filCuesMat3_FilCUES</td>
+      <td>push buttons</td>
+      <td>0, 1</td>
+      <td>matrix: replace asterics * in address with according number from <br>0 to 14</td>
+    </tr>
+    <tr>
+      <td>10 FIL_CUES</td>
+      <td>play CUES 29 - 42 backward</td>
+      <td>filCuesMat3-2_FilCUES</td>
+      <td>push buttons</td>
+      <td>0, 1</td>
+      <td>matrix: replace asterics * in address with according number from <br>15 to 28</td>
+    </tr>
+    <tr>
+      <td>10 FIL_CUES</td>
+      <td>play CUES 29 - 42 back and forth</td>
+      <td>filCuesMat3-3_FilCUES</td>
+      <td>push buttons</td>
+      <td>0, 1</td>
+      <td>matrix:replace asterics * in address with according number from<br>29 to 42</td>
+    </tr>
+  </tbody></table>
+</body>
+</html>
