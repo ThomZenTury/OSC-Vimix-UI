@@ -2997,7 +2997,7 @@
                 "ignoreDefaults": false,
                 "bypass": false,
                 "onCreate": "",
-                "onValue": "send(get('oscTarget'), '/vimix/current/seek', get('jumpFaderMix'))"
+                "onValue": "send(get('oscTarget'), '/vimix/current/seek', {type: 'f', value: get('jumpFaderMix')})"
               },
               {
                 "type": "text",
