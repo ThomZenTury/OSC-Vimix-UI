@@ -2374,12 +2374,12 @@
                 "label": "Play / Pause",
                 "vertical": false,
                 "wrap": false,
-                "on": 0,
-                "off": 1,
+                "on": 1,
+                "off": 0,
                 "mode": "toggle",
                 "doubleTap": false,
                 "decoupled": false,
-                "value": 1,
+                "value": "",
                 "default": 1,
                 "linkId": "",
                 "address": "/O-S-C/singlePPBtn",
@@ -2691,7 +2691,7 @@
                 "ignoreDefaults": false,
                 "bypass": false,
                 "onCreate": "",
-                "onValue": "send(get('oscTarget'), '/vimix/current/speed', get('playSpeedIn'), get('animSpeedMix'))\n"
+                "onValue": "send(get('oscTarget'), '/vimix/current/speed',{type:'f',  value: get('playSpeedIn')}, {type:'f',  value: get('animSpeedMix')})\n"
               },
               {
                 "type": "text",
@@ -2871,7 +2871,7 @@
                 "ignoreDefaults": false,
                 "bypass": false,
                 "onCreate": "",
-                "onValue": "send(get('oscTarget'), '/vimix/current/ffwd', get('ffwdIn'), get('animSpeedMix'))"
+                "onValue": "send(get('oscTarget'), '/vimix/current/ffwd', {type:'f',  value: get('ffwdIn')}, {type:'f',  value: get('animSpeedMix')})"
               },
               {
                 "type": "text",
@@ -15265,7 +15265,7 @@
                 "html": "",
                 "css": "",
                 "value": "",
-                "default": "/path/to/your/vimix/project/folder/",
+                "default": "/home/thomsen/aaa_WRX_/VISUALS/VimixOSCUI_test/",
                 "linkId": "",
                 "address": "/O-S-C/filePathIn_Mix",
                 "preArgs": "",
