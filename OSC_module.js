@@ -287,11 +287,18 @@ module.exports = {
             srcAmount = 0
             firstSrcSync = true
             srcObjs = []
+
             batchAmount = 0
             firstBatchSync = true
             batchObjs = []
+
             namesArr = []
             receive('/O-S-C/firstSync', true)
+            receive('/O-S-C/')
+
+            //maybe there are no batches -> delete all former data
+            receive('/get/batchAmount', batchAmount)
+            receive('/O-S-C/batchAmountDD', batchAmount)
         }
 
         // get file list when entering new project path
