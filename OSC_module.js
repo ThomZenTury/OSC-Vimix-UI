@@ -31,6 +31,8 @@ var batchAmount = 0
 var batchIdx = -1
 var firstBatchSync = true
 var batchObjs = []
+var loadWait = 1500
+var breakUpdate = false
 
 // mapping function
 function scale(number, inMin, inMax, outMin, outMax) {
@@ -76,7 +78,7 @@ var getAllFilesFromFolder = function (dir, getAll) {
 
 
 // client tracking and removing
-app.on('open', (data, client)=>{
+app.on('open', (data, client) => {
 
     //see if newly connected client is already present, if not add to list and show in UI matrix
     if (!clients.includes(client.id)) {
@@ -84,26 +86,26 @@ app.on('open', (data, client)=>{
         clientsIP.push(client.address)
         //receive('/O-S-C/clientAddrMat_Sett', client.address)
     }
-    for(var c=0; c<clients.length; c++) {
-        receive('/O-S-C/clientAddrMat_Sett/'+c, clientsIP[c])
-        receive('/O-S-C/clientIDMat_Sett/'+c, clients[c])
+    for (var c = 0; c < clients.length; c++) {
+        receive('/O-S-C/clientAddrMat_Sett/' + c, clientsIP[c])
+        receive('/O-S-C/clientIDMat_Sett/' + c, clients[c])
     }
-    
+
     // route all clients other than the host client to the "clientUI.json"
     if (client.address !== hostStr && client.address !== '127.0.0.1') {
-        receive('/SESSION/OPEN', projectFolder+'OSC_UI_client_master.json', {clientId: client.id})
+        receive('/SESSION/OPEN', projectFolder + 'OSC_UI_client_master.json', { clientId: client.id })
 
         // to get the current state back on all GUIS feed the amounts to their DDs
-        setTimeout(function() {
-            if(srcAmount != 0) {
+        setTimeout(function () {
+            if (srcAmount != 0) {
                 receive('/get/srcAmount', srcAmount)
                 receive('/O-S-C/srcAmountDD', srcAmount)
             }
-            if(batchAmount != 0) {
+            if (batchAmount != 0) {
                 receive('/get/batchAmount', batchAmount)
                 receive('/O-S-C/batchAmountDD', batchAmount)
             }
-        },500)
+        }, 500)
     }
 
     /*
@@ -114,7 +116,7 @@ app.on('open', (data, client)=>{
     */
 })
 
-app.on('close', (data, client)=>{
+app.on('close', (data, client) => {
     if (clients.includes(client.id)) clients.splice(clients.indexOf(client.id))
 })
 
@@ -125,76 +127,79 @@ module.exports = {
 
         var { address, args, host, port, clientId } = data
 
-            /*########################## initial SYNC WITH VIMIX sources ###########################*/
+        /*########################## initial SYNC WITH VIMIX sources ###########################*/
+
+        // filter incoming message for tag "/name" and a number as it is a unique combination for vimix's sync message
+        if (!breakUpdate && firstSrcSync && address.includes('/name') && address.match(/\d/g)) {
+
+            srcAmount++
+            srcObjs[srcAmount] = { id: srcAmount }
+
+            // get first and last letter of names and fill namesArr with them
+            var shorty = '"' + (args[0].value[0] + args[0].value.slice(-1)).toUpperCase() + '"'
+            var obj = JSON.parse(shorty)
+            namesArr.push(obj)
+            //console.log('one more, firstSrcSync = ' + breakUpdate)
+
+            //get full names
+            //namesArr.push(args[0].value)
+            receive('/O-S-C/namesArr', namesArr)
 
 
-            // filter incoming message for tag "/name" and a number as it is a unique combination for vimix's sync message
-            if (firstSrcSync && address.includes('/name') && address.match(/\d/g)) {
-                srcAmount++
-                srcObjs[srcAmount] = { id: srcAmount }
+            // populate and set O-S-C with data
+            receive('/get/srcAmount', srcAmount)
+            receive('/O-S-C/srcAmountDD', srcAmount)
 
-                // get first and last letter of names and fill namesArr with them
-                var shorty = '"' + (args[0].value[0] + args[0].value.slice(-1)).toUpperCase() + '"'
-                var obj = JSON.parse(shorty)
-                namesArr.push(obj)
 
-                //get full names
-                //namesArr.push(args[0].value)
-                receive('/O-S-C/namesArr', namesArr)
+            // no need to fill in the srcData, as it is done just by setting the DropDown one line above
+            //recieve('/O-S-C/srcData', srcObjs)
 
-                // populate and set O-S-C with data
-                receive('/get/srcAmount', srcAmount)
-                receive('/O-S-C/srcAmountDD', srcAmount)
-                
-                // no need to fill in the srcData, as it is done just by setting the DropDown one line above
-                //recieve('/O-S-C/srcData', srcObjs)
+            console.log('Added source#' + srcAmount + ' to list!')
 
-                console.log('Added source#' + srcAmount + ' to list!')
+            // disable additional syncing after first time
+            var to = setTimeout(() => {
+                firstSrcSync = false
 
-                // disable additional syncing after first time
-                var to = setTimeout(() => {
-                    firstSrcSync = false
-                    
-                    receive('/O-S-C/firstSync', false)
-                    receive('/O-S-C/setAddrSwitch', '#')
-                    clearTimeout(to)
-                }, 150);
-            }
+                receive('/O-S-C/firstSync', false)
+                receive('/O-S-C/setAddrSwitch', '#')
+                clearTimeout(to)
+            }, 150);
+        }
 
-            /*########################## initial SYNC WITH VIMIX batches ###########################*/
+        /*########################## initial SYNC WITH VIMIX batches ###########################*/
 
-            if (firstBatchSync && address.includes('/batch#') && address.includes('/index') && address.match(/\d/g)) {
-                //if (address.includes('/batch#') && address.includes('/index') && address.match(/\d/g)) {
-                batchAmount++
+        if (!breakUpdate && firstBatchSync && address.includes('/batch#') && address.includes('/index') && address.match(/\d/g)) {
+            //if (address.includes('/batch#') && address.includes('/index') && address.match(/\d/g)) {
+            batchAmount++
 
-                batchObjs[batchAmount] = { id: batchAmount }
-                receive('/get/batchAmount', batchAmount)
-                receive('/O-S-C/batchAmountDD', batchAmount)
-                // no need to fill in the batchData, as it is done just by setting the DropDown one line above
-                //recieve('/O-S-C/batchData', batchObjs)
-                console.log('Added batch#' + batchAmount + ' to list!')
+            batchObjs[batchAmount] = { id: batchAmount }
+            receive('/get/batchAmount', batchAmount)
+            receive('/O-S-C/batchAmountDD', batchAmount)
+            // no need to fill in the batchData, as it is done just by setting the DropDown one line above
+            //recieve('/O-S-C/batchData', batchObjs)
+            console.log('Added batch#' + batchAmount + ' to list!')
 
-                // disable additional syncing after first time
-                setTimeout(() => {
-                    firstBatchSync = false
-                }, 350);
+            // disable additional syncing after first time
+            setTimeout(() => {
+                firstBatchSync = false
+            }, 350);
 
-            }
+        }
 
-            /*########################## END INIT SYNC WITH VIMIX ###########################*/
+        /*########################## END INIT SYNC WITH VIMIX ###########################*/
 
-            // general batch alpha sync -> get the first argument and set this as batch alpha in O-S-C
-            if (address.includes('/batch#') && address.match(/\d/g) && address.includes('/alpha')) {
-                batchIdx++
-                // console.log(args[0].value)
-                receive('/vimix/batch#' + batchIdx + '/alpha', args[0].value)
-                setTimeout(() => {
-                    batchIdx = -1
-                }, 100);
+        // general batch alpha sync -> get the first argument and set this as batch alpha in O-S-C
+        if (address.includes('/batch#') && address.match(/\d/g) && address.includes('/alpha')) {
+            batchIdx++
+            // console.log(args[0].value)
+            receive('/vimix/batch#' + batchIdx + '/alpha', args[0].value)
+            setTimeout(() => {
+                batchIdx = -1
+            }, 100);
 
-            }
+        }
 
-            /*########################## MIDI Devices ###########################*/
+        /*########################## MIDI Devices ###########################*/
 
         if (host === 'midi') {
 
@@ -271,6 +276,12 @@ module.exports = {
 
         var { address, args, host, port, clientId } = data
 
+        // set srcData update off
+        if (address === '/O-S-C/breakUpdate') {
+            breakUpdate = args[0].value
+            //console.log(breakUpdate)
+        }
+
         //reset data when opening new file
         if (address === '/vimix/session/open') {
             srcAmount = 0
@@ -342,7 +353,7 @@ module.exports = {
             return
         }
 
-        return { address, args, host, port}
+        return { address, args, host, port }
         //return { data }
     }
 }
