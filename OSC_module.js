@@ -138,6 +138,8 @@ module.exports = {
             // get first and last letter of names and fill namesArr with them
             var shorty = '"' + (args[0].value[0] + args[0].value.slice(-1)).toUpperCase() + '"'
             var obj = JSON.parse(shorty)
+            //check if token is already present and rename if true
+            if(namesArr.includes(obj)) obj = '#'+srcAmount
             namesArr.push(obj)
             //console.log('one more, firstSrcSync = ' + breakUpdate)
 
@@ -154,7 +156,7 @@ module.exports = {
             // no need to fill in the srcData, as it is done just by setting the DropDown one line above
             //recieve('/O-S-C/srcData', srcObjs)
 
-            console.log('Added source#' + srcAmount + ' to list!')
+            console.log('Added source #' + srcAmount + ' to list!')
 
             // disable additional syncing after first time
             var to = setTimeout(() => {
@@ -177,7 +179,7 @@ module.exports = {
             receive('/O-S-C/batchAmountDD', batchAmount)
             // no need to fill in the batchData, as it is done just by setting the DropDown one line above
             //recieve('/O-S-C/batchData', batchObjs)
-            console.log('Added batch#' + batchAmount + ' to list!')
+            console.log('Added batch #' + batchAmount + ' to list!')
 
             // disable additional syncing after first time
             setTimeout(() => {
