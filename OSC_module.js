@@ -5,6 +5,7 @@ var routes = require('./OSC_routingTables/routingExample.js')
 // CHANGE THESE TO YOUR NEEDS!
 var hostStr = "192.168.178.24"
 var portStr = "7000"
+var clientFileName = "OSC_UI_client.json"
 
 // clients
 /* 
@@ -93,7 +94,7 @@ app.on('open', (data, client) => {
 
     // route all clients other than the host client to the "clientUI.json"
     if (client.address !== hostStr && client.address !== '127.0.0.1') {
-        receive('/SESSION/OPEN', projectFolder + 'OSC_UI_client_master.json', { clientId: client.id })
+        receive('/SESSION/OPEN', projectFolder + clientFileName, { clientId: client.id })
 
         // to get the current state back on all GUIS feed the amounts to their DDs
         setTimeout(function () {
@@ -306,6 +307,7 @@ module.exports = {
         // get file list when entering new project path
         if (address === '/O-S-C/getFileList') {
             projectFolder = args[0].value
+            console.log('the new proF = '+projectFolder)
             var fileListObj = {}
             var stateListObj = {}
             var folderCont = getAllFilesFromFolder(args[0].value, false)
@@ -331,6 +333,7 @@ module.exports = {
         // get states list on request
         if (address === '/O-S-C/getStatesList') {
             projectFolder = args[0].value
+            console.log('the new proF = '+projectFolder)
             var stateListObj = {}
             var stateFolderCont = getAllFilesFromFolder(args[0].value + '/' + args[1].value, false)
 
