@@ -965,7 +965,7 @@
                 "ignoreDefaults": false,
                 "bypass": false,
                 "onCreate": "var objects = {};\nfor (var x = 0; x < value+1; x++) {\n  var pos = 'name'+x\n  objects[x] = {id: x};\n}\nset('srcData', objects)\n//console.log(get('srcData'))",
-                "onValue": "var objects = {};\nvar check = get('namesArr')[0]\n\n//show bankSwitch if > \"sources per bank\" in settings\n//if(value > get('maxSRCs_SETT')) set('bankSw_MIX', 1)\n// functionnn show bank switch if count < than settings max sources\n\nif(value > get('maxSRCs_SETT')){\n  set('showBankSwitch', true)\n  set('leftAlignMixer_MIX', '16%')\n  set('widthMixer_MIX', '69%')\n  if(get('addrSwitch') == '#') set('bankSw_MIX', get('bankSw_MIX'))\n  else if(get('addrSwitch') == 'batch#') set('bankSw_MIX', 1)\n}\nelse {\n  set('showBankSwitch', 0)\n  set('leftAlignMixer_MIX', '11%')\n  set('widthMixer_MIX', '74%')\n}\n\n \n// fill data according to setting \"Label Names\"\nif(get('labelNamesDefBtn_SETT') == 0) {\n  for (var x = 0; x < value; x++) {\n    //var pos = 'name'+x\n    objects[x] = {id: x};\n  }\n} \nelse if(get('labelNamesDefBtn_SETT') == 1) {\n  if(check != 'init') {\n    var tmpNames = get('namesArr')\n    var tmpNmsConv = JSON.parse(tmpNames)\n    for (var x = 0; x < value; x++) {\n      //var pos = 'name'+x\n      var id = tmpNmsConv[x]\n      console.log(tmpNmsConv[x])\n      objects[id] = {id: x};\n    }\n  } else {\n    for (var x = 0; x < value; x++) {\n    //var pos = 'name'+x\n      objects[x] = {id: x};\n    }\n  }\n  \n}\nset('srcData', objects)\n//show selector\nset('showSelector', 1)\nset('showInitSyncBtn', 0)\n//set('addrSwitch', get('addrSwitch'))\n//set('srcAmountDD_CC', value)\n//console.log(get('srcData'))"
+                "onValue": "var objects = {};\nvar check = get('namesArr')[0]\n\n//show bankSwitch if > \"sources per bank\" in settings\n//if(value > get('maxSRCs_SETT')) set('bankSw_MIX', 1)\n// functionnn show bank switch if count < than settings max sources\n\nif(value > get('maxSRCs_SETT')){\n  set('showBankSwitch', true)\n  set('leftAlignMixer_MIX', '16%')\n  set('widthMixer_MIX', '69%')\n  if(get('addrSwitch') == '#') set('bankSw_MIX', get('bankSw_MIX'))\n  else if(get('addrSwitch') == 'batch#') set('bankSw_MIX', 1)\n}\nelse {\n  set('showBankSwitch', 0)\n  set('leftAlignMixer_MIX', '11%')\n  set('widthMixer_MIX', '74%')\n}\n\n \n// fill data according to setting \"Label Names\"\n// if index should be shown\nif(get('labelNamesDefBtn_SETT') == 0) {\n  for (var x = 0; x < value; x++) {\n    //var pos = 'name'+x\n    objects[x] = {id: x};\n  }\n}\n// if tokens should be shown\nelse if(get('labelNamesDefBtn_SETT') == 1) {\n  // value on startup is 'init', jsut show index then\n  if(check != 'init') {\n    var tmpNames = get('namesArr')\n    var tmpNmsConv = JSON.parse(tmpNames)\n    for (var x = 0; x < value; x++) {\n      //var pos = 'name'+x\n      var id = tmpNmsConv[x]\n      // check if token is already present\n      // this happens in the custom module now!!\n      //if(!objects.includes(id)) console.log('not present'+tmpNmsConv[x])\n      \n      objects[id] = {id: x};\n    }\n  } else {\n    for (var x = 0; x < value; x++) {\n    //var pos = 'name'+x\n      objects[x] = {id: x};\n    }\n  }\n  \n}\nset('srcData', objects)\n//show selector\nset('showSelector', 1)\nset('showInitSyncBtn', 0)\n//set('addrSwitch', get('addrSwitch'))\n//set('srcAmountDD_CC', value)\n//console.log(get('srcData'))"
               },
               {
                 "type": "dropdown",
@@ -1003,7 +1003,7 @@
                 "ignoreDefaults": false,
                 "bypass": false,
                 "onCreate": "var objects = {};\nfor (var x = 0; x < value; x++) {\n  var pos = 'name'+x\n  objects[x] = {id: x};\n}\nset('batchData', objects)\n//console.log(get('srcData'))",
-                "onValue": "var objects = {};\nfor (var x = 0; x < value; x++) {\n  var pos = 'name'+x\n  objects[x] = {id: x};\n}\nset('batchData', objects)\nset('showInitSyncBtn', 0)\n//set('srcAmountDD_CC', value)\n//console.log(get('srcData'))",
+                "onValue": "var objects = {};\nfor (var x = 0; x < value; x++) {\n  var pos = 'name'+x\n  // the actual shown token 'B#' is added in matrix onValue script\n  objects[x] = {id: x};\n}\nset('batchData', objects)\nset('showInitSyncBtn', 0)\n//set('srcAmountDD_CC', value)\n//console.log(get('srcData'))",
                 "icon": "true",
                 "align": "center",
                 "values": {
@@ -3218,7 +3218,7 @@
                 "ignoreDefaults": false,
                 "bypass": false,
                 "onCreate": "",
-                "onValue": "//see if there are saved states available\nsend(get('oscTarget'),'/O-S-C/breakUpdate', true)\nvar to = setTimeout(() => {\nsend(get('oscTarget'), '/O-S-C/getStatesList', get('filePathIn_Mix'), get('subFolderIn_SETT') ) \nvar states = JSON.parse(get('statesVar'))\n \n//console.log(get('sssnDD_Mix'))\n\nset('addrSwitch', '#')\nsend(get('oscTarget'), '/vimix/session/open', {type: 's', value: get('filePathIn_Mix')+value}, {type: 'f', value: get('transSpeedIn_Mix')})\nvar colRef = get('sssnDD_Mix')\nvar colRefID = get('sssnDD_Mix')\n//console.log(colRefID)\nvar colNum = 0\nif(colRef == '00.mix') colNum = 0\nelse if(colRef == '01.mix') colNum = 1\nelse if(colRef == '02.mix') colNum = 2\nelse if(colRef == '03.mix') colNum = 3\nelse if(colRef == '04.mix') colNum = 4\nelse if(colRef == '05.mix') colNum = 5\nelse if(colRef == '06.mix') colNum = 6\nelse if(colRef == '07.mix') colNum = 7\nelse if(colRef == '08.mix') colNum = 8\nelse if(colRef == '09.mix') colNum = 9\nelse if(colRef == '10.mix') colNum = 10\nvar tmpCol = get('cueColorsVar')\nset('sssnDDColVar', tmpCol[colNum])\n//set('srcAmountDD', 1)\n//set('batchAmountDD', 1)\nset('showSelector', 0)\nset('showInitSyncBtn', 1)\nset('showLoadBar', 1)\n//globals.fade('push', 1, 'loadSSSNBar', 0, 1, get('transSpeedIn_Mix')*1000)\nglobals.fade('push', 1, 'loadBar', 0, 1, get('transSpeedIn_Mix')*1000)\n\nsetTimeout(function() {\n  send(get('oscTarget'),'/O-S-C/breakUpdate', false)\n  set('initSyncBtn', 1)\n  \n  set('showLoadBar', 0)\n  // whole loading state file thing moved to initSyncButton\n  /*setTimeout(function() {\n    //set('addrSwitch', '#')\n    if(Object.keys(states).length != 0 && get('autoStateDefBtn_SETT') == 1 && Object.values(states).includes(value.replace('.mix', '.state'))){\n      //console.log('this is value'+value.replace('.mix', ''))\n      console.log('MATCH!')\n      set('tmpStateFileName', value.replace('.mix', '.state'))\n      if(get('autoLoadDefBtn_SETT') == 1){\n        // load automatically without asking\n        \n      } else {\n        // show popup, ask what to do\n         set('matchingStateModal_Mix', 1)\n      }\n    }\n  }, 500);\n  */\n\n}, (get('transSpeedIn_Mix')+2)*1000);\n\n}, 50)",
+                "onValue": "//see if there are saved states available\nsend(get('oscTarget'),'/O-S-C/breakUpdate', true)\n//var to = setTimeout(() => {\nsend(get('oscTarget'), '/O-S-C/getStatesList', get('filePathIn_Mix'), get('subFolderIn_SETT') ) \nvar states = JSON.parse(get('statesVar'))\n \n//console.log(get('sssnDD_Mix'))\n\nset('addrSwitch', '#')\nsend(get('oscTarget'), '/vimix/session/open', {type: 's', value: get('filePathIn_Mix')+value}, {type: 'f', value: get('transSpeedIn_Mix')})\nvar colRef = get('sssnDD_Mix')\nvar colRefID = get('sssnDD_Mix')\n//console.log(colRefID)\nvar colNum = 0\nif(colRef == '00.mix') colNum = 0\nelse if(colRef == '01.mix') colNum = 1\nelse if(colRef == '02.mix') colNum = 2\nelse if(colRef == '03.mix') colNum = 3\nelse if(colRef == '04.mix') colNum = 4\nelse if(colRef == '05.mix') colNum = 5\nelse if(colRef == '06.mix') colNum = 6\nelse if(colRef == '07.mix') colNum = 7\nelse if(colRef == '08.mix') colNum = 8\nelse if(colRef == '09.mix') colNum = 9\nelse if(colRef == '10.mix') colNum = 10\nvar tmpCol = get('cueColorsVar')\nset('sssnDDColVar', tmpCol[colNum])\n//set('srcAmountDD', 1)\n//set('batchAmountDD', 1)\nset('showSelector', 0)\nset('showInitSyncBtn', 1)\nset('showLoadBar', 1)\n//globals.fade('push', 1, 'loadSSSNBar', 0, 1, get('transSpeedIn_Mix')*1000)\nglobals.fade('push', 1, 'loadBar', 0, 1, get('transSpeedIn_Mix')*1000)\n\nsetTimeout(function() {\n  send(get('oscTarget'),'/O-S-C/breakUpdate', false)\n  set('initSyncBtn', 1)\n  \n  set('showLoadBar', 0)\n  // whole loading state file thing moved to initSyncButton\n  /*setTimeout(function() {\n    //set('addrSwitch', '#')\n    if(Object.keys(states).length != 0 && get('autoStateDefBtn_SETT') == 1 && Object.values(states).includes(value.replace('.mix', '.state'))){\n      //console.log('this is value'+value.replace('.mix', ''))\n      console.log('MATCH!')\n      set('tmpStateFileName', value.replace('.mix', '.state'))\n      if(get('autoLoadDefBtn_SETT') == 1){\n        // load automatically without asking\n        \n      } else {\n        // show popup, ask what to do\n         set('matchingStateModal_Mix', 1)\n      }\n    }\n  }, 500);\n  */\n\n}, (get('transSpeedIn_Mix')+2)*1000);\n\n//}, 50)",
                 "label": "auto",
                 "icon": "true",
                 "align": "center",
@@ -3403,7 +3403,7 @@
                 "ignoreDefaults": false,
                 "bypass": false,
                 "onCreate": "",
-                "onValue": "if(value == 1){\n  send(get('oscTarget'), '/O-S-C/getFileList', get('filePathIn_Mix'), get('subFolderIn_SETT') ) \n  send(get('oscTarget'), '/vimix/batch#0/sync')\n  send(get('oscTarget'), '/vimix/current/sync')\n  set('showInitSyncBtn', 0)\n  \n  //console.log(states+'ysfdgdj')\n  setTimeout(function() {\n    set('syncDepths', 1)\n    set('switchAddr', '#')\n    set('srcAmountDD', get('srcAmountDD'))\n    set('batchAmountDD', get('batchAmountDD'))\n    //see if there a re saved states available\n    var states = JSON.parse(get('statesVar'))\n    var curScene = get('sssnDD_Mix')\n    if(Object.keys(states).length != 0 && get('autoStateDefBtn_SETT') == 1 && Object.values(states).includes(curScene.replace('.mix', '.state'))){\n      console.log('MATCH! State file same name detected!')\n      set('tmpStateFileName', curScene.replace('.mix', '.state'))\n        if(get('autoLoadDefBtn_SETT') == 1){\n          // load automatically without asking\n          set('verifyStateFile', 1)\n          set('verifyStateFile', 0)\n        } else {\n          // show popup, ask what to do\n           set('matchingStateModal_Mix', 1)\n        }\n    }\n    \n  }, 500);\n}\n"
+                "onValue": "if(value == 1){\n  //reset all cues Data\n  set('alphaCueData', {})\n  set('cuesQntVar1', 0)\n  set('cuesQntVar2', 0)\n  set('cuesQntVar3', 0)\n  \n  set('filterCueData', {})\n  set('filCuesQntVar1', 0)\n  set('filCuesQntVar2', 0)\n  set('filCuesQntVar3', 0)\n\n  send(get('oscTarget'), '/O-S-C/getFileList', get('filePathIn_Mix'), get('subFolderIn_SETT') ) \n  send(get('oscTarget'), '/vimix/batch#0/sync')\n  send(get('oscTarget'), '/vimix/current/sync')\n  set('showInitSyncBtn', 0)\n  \n  //console.log(states+'ysfdgdj')\n  setTimeout(function() {\n    set('syncDepths', 1)\n    set('switchAddr', '#')\n    set('srcAmountDD', get('srcAmountDD'))\n    set('batchAmountDD', get('batchAmountDD'))\n    //see if there a re saved states available\n    var states = JSON.parse(get('statesVar'))\n    var curScene = get('sssnDD_Mix')\n    if(Object.keys(states).length != 0 && get('autoStateDefBtn_SETT') == 1 && Object.values(states).includes(curScene.replace('.mix', '.state'))){\n      console.log('MATCH! State file same name detected!')\n      set('tmpStateFileName', curScene.replace('.mix', '.state'))\n        if(get('autoLoadDefBtn_SETT') == 1){\n          // load automatically without asking\n          set('verifyStateFile', 1)\n          set('verifyStateFile', 0)\n        } else {\n          // show popup, ask what to do\n           set('matchingStateModal_Mix', 1)\n        }\n    }\n    \n  }, 500);\n}\n"
               },
               {
                 "type": "input",
@@ -4295,7 +4295,7 @@
                 "scroll": true,
                 "innerPadding": true,
                 "tabsPosition": "top",
-                "label": "auto",
+                "label": "Matching .state file detected!",
                 "popupLabel": "auto",
                 "popupPadding": "auto",
                 "variables": "@{parent.variables}",
@@ -4395,7 +4395,7 @@
                     "ignoreDefaults": false,
                     "bypass": false,
                     "onCreate": "",
-                    "onValue": "//send(\"127.0.0.1:7001\", \"/STATE/OPEN\", \"/home/thomsen/aaa_WRX_/VISUALS/VimixTutorials/savedStates/00.state\")\nif(value == 1) {\n  var prevChoice = get('saveTabsMat_SETT')\n  //console.log(prevChoice)\n  setTimeout(function() {\n    set('saveTabsMat_SETT/*', 1)\n    //console.log('nachher' + get('saveTabsMat_SETT'))\n    set('loadDisk', 1)\n    set('matchingStateModal_Mix', 0)\n\n    for(var i=0; i<prevChoice.length; i++){\n      set('saveTabsMat_SETT/'+i, prevChoice[i])\n    }\n    //console.log('nachher' + get('saveTabsMat_SETT'))\n\n}, 50)\n}\n"
+                    "onValue": "//send(\"127.0.0.1:7001\", \"/STATE/OPEN\", \"/home/thomsen/aaa_WRX_/VISUALS/VimixTutorials/savedStates/00.state\")\nif(value == 1) {\n  // get current choice of tabs to save/load to reatore them after complete .state file\n  var prevChoice = get('saveTabsMat_SETT')\n\n  setTimeout(function() {\n    // to load everything from the .state file\n    set('saveTabsMat_SETT/*', 1)\n\n    set('loadDisk', 1)\n    set('matchingStateModal_Mix', 0)\n\n  // reset the tabs choice to previous selections\n    for(var i=0; i<prevChoice.length; i++){\n      set('saveTabsMat_SETT/'+i, prevChoice[i])\n    }\n\n}, 50)\n}\n"
                   },
                   {
                     "type": "button",
@@ -4487,7 +4487,7 @@
                     "ignoreDefaults": false,
                     "bypass": false,
                     "onCreate": "",
-                    "onValue": "//send(\"127.0.0.1:7001\", \"/STATE/OPEN\", \"/home/thomsen/aaa_WRX_/VISUALS/VimixTutorials/savedStates/00.state\")\nif(value == 1) {\n  var prevChoice = get('saveTabsMat_SETT')\n  //console.log(prevChoice)\n  setTimeout(function() {\n    set('saveTabsMat_SETT/*', 1)\n    //console.log('nachher' + get('saveTabsMat_SETT'))\n    set('loadDisk', 1)\n    set('matchingStateModal_Mix', 0)\n\n    for(var i=0; i<prevChoice.length; i++){\n      set('saveTabsMat_SETT/'+i, prevChoice[i])\n    }\n    //console.log('nachher' + get('saveTabsMat_SETT'))\n\n}, 50)\n}\n\nset('autoLoadDefBtn_SETT', 1) // will trigger autoStateDefBtn also\nset('matchingStateModal_Mix', 0)"
+                    "onValue": "//send(\"127.0.0.1:7001\", \"/STATE/OPEN\", \"/home/thomsen/aaa_WRX_/VISUALS/VimixTutorials/savedStates/00.state\")\nif(value == 1) {\n  var prevChoice = get('saveTabsMat_SETT')\n  //console.log(prevChoice)\n  setTimeout(function() {\n    set('saveTabsMat_SETT/*', 1)\n    //console.log('nachher' + get('saveTabsMat_SETT'))\n    set('loadDisk', 1)\n    set('matchingStateModal_Mix', 0)\n\n    for(var i=0; i<prevChoice.length; i++){\n      set('saveTabsMat_SETT/'+i, prevChoice[i])\n    }\n    //console.log('nachher' + get('saveTabsMat_SETT'))\n\n  }, 50)\n  set('autoLoadDefBtn_SETT', 1) // will trigger autoStateDefBtn also\n  set('matchingStateModal_Mix', 0)\n}\n\n"
                   },
                   {
                     "type": "button",
@@ -4533,7 +4533,7 @@
                     "ignoreDefaults": false,
                     "bypass": false,
                     "onCreate": "",
-                    "onValue": "set('autoStateDefBtn_SETT', 0)\nset('matchingStateModal_Mix', 0)"
+                    "onValue": "if(value == 1){\n  // deact in settings\n  set('autoStateDefBtn_SETT', 0)\n  // close this popup/modal\n  set('matchingStateModal_Mix', 0)\n}"
                   }
                 ],
                 "tabs": []
@@ -4736,7 +4736,7 @@
             "bypass": false,
             "onCreate": "",
             "onValue": "",
-            "onKeyboard": "switch (key) {\n  case \"°\":\n    //console.log('xasliju')\n    var modState = get('cueNamesModal_CUES')\n    modState ^= 1\n    set('cueNamesModal_CUES', modState)\n    break\n}",
+            "onKeyboard": "switch (key) {\n  case \"°\":\n    //console.log('xasliju')\n    // toggle visibility of cue names table\n    var modState = get('cueNamesModal_CUES')\n    modState ^= 1\n    set('cueNamesModal_CUES', modState)\n    break\n}",
             "keyBinding": [
               ""
             ],
@@ -15438,7 +15438,7 @@
                 "ignoreDefaults": false,
                 "bypass": false,
                 "onCreate": "",
-                "onValue": "//toolbar(1, 5)\n//send(get('oscTarget'), '/O-S-C/getFileList', {type: 's', value: value} )\n// Function to Run for every Element\nfunction allAreZero(arr) {\n  return arr.every(element => element == 0);\n}\n\nvar states = JSON.parse(get('statesVar'))\nif(Object.keys(states).length == 0){\n  //warning NO state file, please create and press update update\n  set('showStateFilePopUp', 1)\n  set('noStateFilePopup_SETT', 1)\n} else {\n\n  var choice = get('saveTabsMat_SETT')\n  if(allAreZero(choice)) {\n    set('showMakeChoiceBtnVar_SETT', 1)\n  } else {\n  \n    var tabNames = ['panel_MIX', 'MIX_CUES', 'GEO', 'GEO_ACT', 'DEFORM', 'LAYERS', 'CC', 'FILTER', 'FIL_CUES', 'SETTINGS' ]\n    var mixWidgestToSave = ['colCorDD', 'mainMixMat', 'mainMixMat1', 'mainMixMat2', 'targetMinOpacIn', 'targetMaxOpacIn', 'fadeSpeedIn', 'playPauseMat', 'playPauseMat1', 'playPauseMat2', 'colCorMatrix', 'colCorMatrix1', 'colCorMatrix2', 'transSpeedIn_Mix', 'masterFader', 'bankSw_MIX']\n    \n    var tabsToSave = get('saveTabsMat_SETT')\n    var fileName = get('sssnDD_Mix')\n    fileName = fileName.replace('.mix', '.state')\n    var statePath = get('filePathIn_Mix')+get('subFolderIn_SETT')+'/'+fileName\n    //console.log( fileName.replace('.mix', '.json'))\n    //console.log(statePath)\n    \n    for(var i=0; i<tabsToSave.length; i++){\n      // sort out MIX panel as it is special\n      if(i == 0){\n        if(tabsToSave[i] == 1){\n          for (var k=0; k<mixWidgestToSave.length; k++){\n            var state = stateGet(mixWidgestToSave[k])\n            send('module:custom', '/state/save',mixWidgestToSave[k], state, statePath)\n          }\n        }\n      } else {\n        if(tabsToSave[i] == 1){\n          var state = stateGet(tabNames[i])\n          send('module:custom', '/state/save',tabNames[i], state, statePath)\n          //console.log(state)\n        }\n      }\n    }\n  }\n}\n\n\n\n//var slot = get('switch_1')\n//var state = stateGet('panel_1')\n//send('module:custom', '/state/save', slot, state)",
+                "onValue": "//toolbar(1, 5)\n//send(get('oscTarget'), '/O-S-C/getFileList', {type: 's', value: value} )\n\n// Function to Run for every Element\nfunction allAreZero(arr) {\n  return arr.every(element => element == 0);\n}\n\nvar states = JSON.parse(get('statesVar'))\nvar curSssn = get('sssnDD_Mix')\n// see if there is a matching state file for the current open .mix project\n//if(Object.keys(states).length == 0){\n  \n//}\nif(!get('statesVar').includes(curSssn)) {\n  //warning no matching state file detected, please create and press update update\n  set('showStateFilePopUp', 1)\n  set('noStateFilePopup_SETT', 1)\n}\n\nelse {\n  console.log(states)\n  var choice = get('saveTabsMat_SETT')\n  if(allAreZero(choice)) {\n    set('showMakeChoiceBtnVar_SETT', 1)\n  } else {\n  \n    var tabNames = ['panel_MIX', 'MIX_CUES', 'GEO', 'GEO_ACT', 'DEFORM', 'LAYERS', 'CC', 'FILTER', 'FIL_CUES', 'SETTINGS' ]\n    var mixWidgestToSave = ['colCorDD', 'mainMixMat', 'mainMixMat1', 'mainMixMat2', 'targetMinOpacIn', 'targetMaxOpacIn', 'fadeSpeedIn', 'playPauseMat', 'playPauseMat1', 'playPauseMat2', 'colCorMatrix', 'colCorMatrix1', 'colCorMatrix2', 'transSpeedIn_Mix', 'masterFader', 'bankSw_MIX']\n    \n    var tabsToSave = get('saveTabsMat_SETT')\n    //var fileName = get('sssnDD_Mix')\n    var fileName = curSssn.replace('.mix', '.state')\n    var statePath = get('filePathIn_Mix')+get('subFolderIn_SETT')+'/'+fileName\n    //console.log( fileName.replace('.mix', '.json'))\n    //console.log(statePath)\n    \n    for(var i=0; i<tabsToSave.length; i++){\n      // sort out MIX panel as it is special\n      if(i == 0){\n        if(tabsToSave[i] == 1){\n          for (var k=0; k<mixWidgestToSave.length; k++){\n            var state = stateGet(mixWidgestToSave[k])\n            send('module:custom', '/state/save',mixWidgestToSave[k], state, statePath)\n          }\n        }\n      } else {\n        if(tabsToSave[i] == 1){\n          var state = stateGet(tabNames[i])\n          send('module:custom', '/state/save',tabNames[i], state, statePath)\n          //console.log(state)\n        }\n      }\n    }\n  }\n}\n\n\n\n//var slot = get('switch_1')\n//var state = stateGet('panel_1')\n//send('module:custom', '/state/save', slot, state)",
                 "colorTextOn": "auto",
                 "label": "Save Chosen \nTABS State to\nDisk",
                 "vertical": false,
@@ -16457,7 +16457,8 @@
                   "Mix Only": "MixOnly",
                   "Geometry": "Geometry",
                   "CC & Filter": "CCFilter",
-                  "Setup": "Setup"
+                  "Setup": "Setup",
+                  "Test": "Test"
                 },
                 "value": "",
                 "default": "All",
@@ -16470,7 +16471,7 @@
                 "ignoreDefaults": false,
                 "bypass": false,
                 "onCreate": "",
-                "onValue": "if(value == \"All\") {\n  var showTabs = [1,1,1,1,1,1,1,1,1,1]\n}\nelse if(value == \"Gig\") {\n  var showTabs = [1,1,0,0,0,0,0,1,1,0]\n}\nelse if(value == \"MixOnly\") {\n  var showTabs = [1,1,0,0,0,0,0,0,0,0]\n}\nelse if(value == \"Geometry\") {\n  var showTabs = [1,0,1,1,1,1,0,0,0,0]\n}\nelse if(value == \"CCFilter\") {\n  var showTabs = [1,0,0,0,0,0,0,1,1,0]\n}\nelse if(value == \"Setup\") {\n  var showTabs = [1,0,1,1,1,1,1,0,0,0]\n}\n\n\n//set accordingly to array variables\nfor(var i=0; i<showTabs.length; i++){ \n    set('showTabsBtn_SETT/'+i, showTabs[i]) \n  }"
+                "onValue": "if(value == \"All\") {\n  var showTabs = [1,1,1,1,1,1,1,1,1,1]\n}\nelse if(value == \"Gig\") {\n  var showTabs = [1,1,0,0,0,0,0,1,1,0]\n}\nelse if(value == \"MixOnly\") {\n  var showTabs = [1,1,0,0,0,0,0,0,0,0]\n}\nelse if(value == \"Geometry\") {\n  var showTabs = [1,0,1,1,1,1,0,0,0,0]\n}\nelse if(value == \"CCFilter\") {\n  var showTabs = [1,0,0,0,0,0,0,1,1,0]\n}\nelse if(value == \"Setup\") {\n  var showTabs = [1,0,1,1,1,1,1,0,0,0]\n}\nelse if(value == \"Test\") {\n  var showTabs = [1,1,1,1,1,1,1,1,1,1]\n}\n\n\n//set accordingly to array variables\nfor(var i=0; i<showTabs.length; i++){ \n    set('showTabsBtn_SETT/'+i, showTabs[i]) \n  }"
               },
               {
                 "type": "text",
@@ -16610,14 +16611,14 @@
               {
                 "type": "modal",
                 "top": "70%",
-                "left": "90%",
+                "left": "80%",
                 "lock": false,
                 "id": "noStateFilePopup_SETT",
                 "visible": "@{showStateFilePopUp}",
                 "interaction": true,
                 "comments": "",
-                "width": "10%",
-                "height": "5%",
+                "width": "20%",
+                "height": "3%",
                 "expand": "false",
                 "popupWidth": "80%",
                 "popupHeight": "80%",
@@ -16651,7 +16652,7 @@
                 "traversing": false,
                 "doubleTap": false,
                 "value": "",
-                "default": "",
+                "default": 0,
                 "linkId": "",
                 "address": "auto",
                 "preArgs": "",
@@ -16661,7 +16662,7 @@
                 "ignoreDefaults": false,
                 "bypass": false,
                 "onCreate": "",
-                "onValue": "",
+                "onValue": "if(value == 0) set('showStateFilePopUp', 0)",
                 "widgets": [
                   {
                     "type": "text",
@@ -16689,7 +16690,7 @@
                     "vertical": false,
                     "wrap": false,
                     "align": "center",
-                    "value": "JS{\n  var folder = @{filePathIn_Mix}\n  var stateFolder = @{subFolderIn_SETT}\n  if(@{sssnDD_Mix} !== undefined){\n  var fileName = @{sssnDD_Mix}.replace('.mix', '.state')\n  var msg = 'No matching .state file could be found in directory:\\n' + folder + stateFolder + '\\n\\n Please create a file there like this: \\n\\n file name: ' + fileName +'\\nfile content: {}\\n\\n Just open the file once and type\\nthe two curved brackets in there.\\nSave! Done!'\n  } else  {\n var msg = 'Please select a .mix file first.\\n\\nTab: MIX\\nDropdown Menu top right' \n}\n  return msg\n}",
+                    "value": "JS{\n  var folder = @{filePathIn_Mix}\n  var stateFolder = @{subFolderIn_SETT}\n  if(@{sssnDD_Mix} !== undefined){\n  var fileName = @{sssnDD_Mix}.replace('.mix', '.state')\n  var msg = 'No matching .state file could be found in directory:\\n' + folder + stateFolder + '\\n\\n Please create a file there like this: \\n\\n file name: ' + fileName +'\\nfile content: {}\\n\\n Just open the file once and type\\nthe two curved brackets in there.\\nSave! Done!'\n  } else  {\n var msg = 'Please select a .mix file first!\\n\\nTab: MIX\\nDropdown Menu top right' \n}\n  return msg\n}",
                     "default": "",
                     "linkId": "",
                     "address": "auto",
@@ -16725,7 +16726,7 @@
                     "html": "",
                     "css": "",
                     "colorTextOn": "auto",
-                    "label": "After creating the file, come back and \npress this update button once!",
+                    "label": "After creating the file, press HERE once.\nThen press SAVE button again!",
                     "vertical": false,
                     "wrap": false,
                     "on": 1,
@@ -16744,7 +16745,7 @@
                     "ignoreDefaults": false,
                     "bypass": false,
                     "onCreate": "",
-                    "onValue": "send(get('oscTarget'), '/O-S-C/getFileList', get('filePathIn_Mix'), get('subFolderIn_SETT') )\nset('noStateFilePopup_SETT', 0)\nset('showStateFilePopUp', 0)"
+                    "onValue": "if(value == 1) {\n  send(get('oscTarget'), '/O-S-C/getFileList', get('filePathIn_Mix'), get('subFolderIn_SETT') )\n  set('noStateFilePopup_SETT', 0)\n  set('showStateFilePopUp', 0)\n}"
                   },
                   {
                     "type": "button",
@@ -17447,7 +17448,7 @@
                 "borderRadius": "auto",
                 "padding": "auto",
                 "css": "",
-                "colorBg": "#002275",
+                "colorBg": "rgba(0,30,103,0.85)",
                 "layout": "vertical",
                 "justify": "start",
                 "gridTemplate": "",
@@ -17455,7 +17456,7 @@
                 "scroll": true,
                 "innerPadding": true,
                 "tabsPosition": "top",
-                "label": "auto",
+                "label": "Save \nVimix SSSN",
                 "popupLabel": "auto",
                 "popupPadding": "auto",
                 "variables": "@{parent.variables}",
