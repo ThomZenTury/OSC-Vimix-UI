@@ -5,6 +5,7 @@ var routes = require('./OSC_routingTables/routingExample.js')
 // CHANGE THESE TO YOUR NEEDS!
 var hostStr = "192.168.178.24"
 var portStr = "7000"
+var hostFileName = "OSC_UI.json"
 var clientFileName = "OSC_UI_client.json"
 
 // clients
@@ -20,7 +21,9 @@ var sessions = {
 var clients = []
 var clientsIP = []
 
-var projectFolder = ''
+// var projectFolder = ''
+var projectFolder = '/home/thomsen/aaa_WRX_/VISUALS/VimixOSCUI_test/'
+var statesFolder = 'OSC_savedStates'
 var statePath = ''
 var states = {}
 
@@ -81,21 +84,13 @@ var getAllFilesFromFolder = function (dir, getAll) {
 // client tracking and removing
 app.on('open', (data, client) => {
 
-    //see if newly connected client is already present, if not add to list and show in UI matrix
-    if (!clients.includes(client.id)) {
-        clients.push(client.id)
-        clientsIP.push(client.address)
-        //receive('/O-S-C/clientAddrMat_Sett', client.address)
-    }
-    for (var c = 0; c < clients.length; c++) {
-        receive('/O-S-C/clientAddrMat_Sett/' + c, clientsIP[c])
-        receive('/O-S-C/clientIDMat_Sett/' + c, clients[c])
-    }
-
     // route all clients other than the host client to the "clientUI.json"
-    if (client.address !== hostStr && client.address !== '127.0.0.1') {
+    if (client.address === hostStr || client.address === '127.0.0.1') {
+        console.log('from host: '+client.address)
+        //receive('/SESSION/OPEN', projectFolder + hostFileName, { clientId: client.id })
+    } else {
         receive('/SESSION/OPEN', projectFolder + clientFileName, { clientId: client.id })
-
+        console.log('external'+client.address)
         // to get the current state back on all GUIS feed the amounts to their DDs
         setTimeout(function () {
             if (srcAmount != 0) {
@@ -108,6 +103,19 @@ app.on('open', (data, client) => {
             }
         }, 500)
     }
+
+    //see if newly connected client is already present, if not add to list and show in UI matrix
+    if (!clients.includes(client.id)) {
+        clients.push(client.id)
+        clientsIP.push(client.address)
+        //receive('/O-S-C/clientAddrMat_Sett', client.address)
+    }
+    for (var c = 0; c < clients.length; c++) {
+        receive('/O-S-C/clientAddrMat_Sett/' + c, clientsIP[c])
+        receive('/O-S-C/clientIDMat_Sett/' + c, clients[c])
+    }
+
+    
 
     /*
     // only needed if there is more than just master.json and client.json -> then swap with above one
@@ -306,8 +314,8 @@ module.exports = {
 
         // get file list when entering new project path
         if (address === '/O-S-C/getFileList') {
-            projectFolder = args[0].value
-            console.log('the new proF = '+projectFolder)
+            //projectFolder = args[0].value
+            console.log('the new proF FileList = '+projectFolder)
             var fileListObj = {}
             var stateListObj = {}
             var folderCont = getAllFilesFromFolder(args[0].value, false)
@@ -332,10 +340,11 @@ module.exports = {
 
         // get states list on request
         if (address === '/O-S-C/getStatesList') {
-            projectFolder = args[0].value
-            console.log('the new proF = '+projectFolder)
+            //projectFolder = args[0].value
+            console.log('the new proF StatesList = '+projectFolder)
             var stateListObj = {}
-            var stateFolderCont = getAllFilesFromFolder(args[0].value + '/' + args[1].value, false)
+            // var stateFolderCont = getAllFilesFromFolder(args[0].value + '/' + args[1].value, false)
+            var stateFolderCont = getAllFilesFromFolder(projectFolder + '/' + statesFolder, false)
 
             for (var i = 0; i < stateFolderCont.length; i++) {
                 if (stateFolderCont[i].includes('.state')) {
