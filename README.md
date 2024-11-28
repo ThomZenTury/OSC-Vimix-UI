@@ -5,5 +5,5 @@ For more information and Video tutorials on both these applications please have 
 
 PLEASE BE AWARE that this template is still WIP.
 Known failures at the moment:
-- connecting clients from different devices does not automatically load the client.json. Either load the file manually on your device cia the O-S-C toolbar or wait a few dayys until this is fixed
+- connecting clients from different devices does not automatically load the client.json. Either load the file manually on your device via the O-S-C toolbar or wait a few days until this is fixed
 - snycing is messed up when connecting to clients -> same reason as above 
