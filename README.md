@@ -30,12 +30,12 @@ Thumbnails
 You can collect thumbnails of your sources for better visual reference in the UI - especially when working with Vimix's headless feature.
 Your thumbnails
 - have to be ".png" file format
-- must be saved in the folder ".../OSC_assets/thumbnails" 
+- must be saved in the folder ".../OSC_assets/thumbnails"
 
 For them to be detected by the template give them names like this:
 Single Sources
-    VimixSessionName_IndexOfSourceInVimix.png
-    VimixSessionName = without ".mix" suffix
+VimixSessionName_IndexOfSourceInVimix.png
+VimixSessionName = without ".mix" suffix
     IndexOfSourceInVimix = Index+1
     Example: If your Vimix session is called "MyVimixSession.mix" and it contains 4 sources then the according thumbnails must be named:
        MyVimixSession_1.png
