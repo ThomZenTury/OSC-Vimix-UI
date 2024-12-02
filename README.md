@@ -25,7 +25,6 @@ To save the states of certain tabs
 - save the file.
 Example: the Vimix project you are working on is called "myVimixProject.mix"
 -> create the file .../OSC_savedStates/myVimixProject.state with two curly brackets in it as content
-
 Thumbnails
 You can collect thumbnails of your sources for better visual reference in the UI - especially when working with Vimix's headless feature.
 Your thumbnails
