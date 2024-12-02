@@ -18,27 +18,33 @@ Known failures at the moment:
 # Naming Conventions
 
 State files
-To save the states of certain tabs go to the ".../OSC_savedStates" folder and create a file with the name of your currently open .mix project. Replace ".mix" with ".state". Open it once and type two curly brackets {} into it. Save the file
-Example: the Vimix project you are working on is called "myVimixProject.mix" -> create the file .../OSC_savedStates/myVimixProject.state with two curly brackets in it as content
+To save the states of certain tabs
+- go to the ".../OSC_savedStates" folder and create a file with the name of your currently open .mix project
+- replace ".mix" with ".state" in your file name
+- open the file once and type two curly brackets {} into its
+- save the file.
+Example: the Vimix project you are working on is called "myVimixProject.mix"
+-> create the file .../OSC_savedStates/myVimixProject.state with two curly brackets in it as content
 
 Thumbnails
 You can collect thumbnails of your sources for better visual reference in the UI - especially when working with Vimix's headless feature.
-Your thumbnails have to be ".png" file format and must be saved in the folder ".../OSC_assets/thumbnails". 
-For them to be detected by the template give them names like this:
+Your thumbnails
+- have to be ".png" file format
+- must be saved in the folder ".../OSC_assets/thumbnails" 
 
+For them to be detected by the template give them names like this:
 1. Single Sources
     VimixSessionName_IndexOfSourceInVimix.png
     VimixSessionName = without ".mix" suffix
     IndexOfSourceInVimix = Index+1
-    Example: If your Vimix session is called "MyVimixSession.mix" and it contains 4 sources
-    then the according thumbnails must be named:
-        MyVimixSession_1.png
-        MyVimixSession_2.png
-        MyVimixSession_3.png
-        MyVimixSession_4.png
+    Example: If your Vimix session is called "MyVimixSession.mix" and it contains 4 sources then the according thumbnails must be named:
+       MyVimixSession_1.png
+       MyVimixSession_2.png
+       MyVimixSession_3.png
+       MyVimixSession_4.png
 
 
-2. Batches
+3. Batches
     VimixSessionName_B-IndexOfBatchInVimix.png
     VimixSessionName = without ".mix" suffix
     IndexOfBatchInVimix = Index+1
