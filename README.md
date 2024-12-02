@@ -33,22 +33,6 @@ Your thumbnails
 - must be saved in the folder ".../OSC_assets/thumbnails"
 
 For them to be detected by the template give them names like this:
-Single Sources
-VimixSessionName_IndexOfSourceInVimix.png
-VimixSessionName = without ".mix" suffix
-    IndexOfSourceInVimix = Index+1
-    Example: If your Vimix session is called "MyVimixSession.mix" and it contains 4 sources then the according thumbnails must be named:
-       MyVimixSession_1.png
-       MyVimixSession_2.png
-       MyVimixSession_3.png
-       MyVimixSession_4.png
-Batches
-    VimixSessionName_B-IndexOfBatchInVimix.png
-    VimixSessionName = without ".mix" suffix
-    IndexOfBatchInVimix = Index+1
-    Example: If your Vimix session is called "MyVimixSession.mix" and it you created 3 batches in it
-    then the according thumbnails must be named:
-        MyVimixSession_B-1.png
-        MyVimixSession_B-2.png
-        MyVimixSession_B-3.png
+- Single Sources
+
         MyVimixSession_B-4.png
