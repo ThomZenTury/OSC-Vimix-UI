@@ -315,7 +315,7 @@ module.exports = {
         // get file list when entering new project path
         if (address === '/O-S-C/getFileList') {
             //projectFolder = args[0].value
-            console.log('the new proF FileList = '+projectFolder)
+            //console.log('the new proF FileList = '+projectFolder)
             var fileListObj = {}
             var stateListObj = {}
             var folderCont = getAllFilesFromFolder(args[0].value, false)
@@ -341,7 +341,7 @@ module.exports = {
         // get states list on request
         if (address === '/O-S-C/getStatesList') {
             //projectFolder = args[0].value
-            console.log('the new proF StatesList = '+projectFolder)
+            //console.log('the new proF StatesList = '+projectFolder)
             var stateListObj = {}
             // var stateFolderCont = getAllFilesFromFolder(args[0].value + '/' + args[1].value, false)
             var stateFolderCont = getAllFilesFromFolder(projectFolder + '/' + statesFolder, false)
