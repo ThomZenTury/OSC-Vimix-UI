@@ -44,7 +44,7 @@ For them to be detected by the template give them names like this:
        MyVimixSession_4.png
 
 
-3. Batches
+2. Batches
     VimixSessionName_B-IndexOfBatchInVimix.png
     VimixSessionName = without ".mix" suffix
     IndexOfBatchInVimix = Index+1
