@@ -17,21 +17,42 @@ Known failures at the moment:
 
 # Naming Conventions
 
-State files
+<b>State files</b>
+
 To save the states of certain tabs
 - go to the ".../OSC_savedStates" folder and create a file with the name of your currently open .mix project
 - replace ".mix" with ".state" in your file name
 - open the file once and type two curly brackets {} into its
 - save the file.
+
 Example: the Vimix project you are working on is called "myVimixProject.mix"
+
 -> create the file .../OSC_savedStates/myVimixProject.state with two curly brackets in it as content
-  Thumbnails
-  You can collect thumbnails of your sources for better visual reference in the UI - especially when working with Vimix's headless feature.
-  Your thumbnails
+ 
+<b>Thumbnails</b>
+
+You can collect thumbnails of your sources for better visual reference in the UI - especially when working with Vimix's headless feature. They
 - have to be ".png" file format
 - must be saved in the folder ".../OSC_assets/thumbnails"
 
 For them to be detected by the template give them names like this:
-- Single Sources
 
-        MyVimixSession_B-4.png
+- Single Sources
+  
+  - file name: "VimixSessionName_B-IndexOfBatchInVimix.png" (where VimixSessionName = without ".mix" suffix and IndexOfSourceInVimix = Index+1)
+  
+  Example: If your Vimix session is called "MyVimixSession.mix" and it contains 4 sources then the according thumbnails must be named:
+  - MyVimixSession_1.png
+  - MyVimixSession_2.png
+  - MyVimixSession_3.png
+  - MyVimixSession_4.png
+ 
+- Batches
+
+    - file name: "VimixSessionName_B-IndexOfBatchInVimix.png" (where VimixSessionName = without ".mix" suffix and IndexOfBatchInVimix = Index+1)
+  
+  Example: If your Vimix session is called "MyVimixSession.mix" and it contains 4 sources then the according thumbnails must be named:
+  - MyVimixSession_B-1.png
+  - MyVimixSession_B-2.png
+  - MyVimixSession_B-3.png
+  - MyVimixSession_B-4.png
