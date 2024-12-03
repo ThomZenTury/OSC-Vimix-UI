@@ -1,7 +1,7 @@
 const path = nativeRequire('path');
 const fs = nativeRequire('fs');
-var routes = require('./OSC_routingTables/routingExample.js')
-var routesExt = require('./OSC_routingTables/routingExternals.js')
+var routesMidi = require('./OSC_routingTables/routingMidi.js')
+var routesOSC = require('./OSC_routingTables/routingOSC.js')
 
 // CHANGE THESE TO YOUR NEEDS!
 var hostStr = "192.168.178.24"
@@ -224,22 +224,22 @@ module.exports = {
 
                     var mappedVal = scale(value, 0, 127, -0.35, 1.0) // faders alpha
 
-                    if (routes.myFirstDeviceFaders[ctrl]) {
+                    if (routesMidi.myFirstDeviceFaders[ctrl]) {
 
                         // exceptions to send differently scaled values
                         if (ctrl != 13 && ctrl != 55 && ctrl != 93) {
-                            receive(routes.myFirstDeviceFaders[ctrl], mappedVal)
-                            sendOsc({ address: routes.myFirstDeviceFaders[ctrl], args: [{ type: "f", value: mappedVal }], host: hostStr, port: portStr })
+                            receive(routesMidi.myFirstDeviceFaders[ctrl], mappedVal)
+                            sendOsc({ address: routesMidi.myFirstDeviceFaders[ctrl], args: [{ type: "f", value: mappedVal }], host: hostStr, port: portStr })
                         } else {
-                            receive(routes.myFirstDeviceFaders[ctrl], mappedValInv)
-                            sendOsc({ address: routes.myFirstDeviceFaders[ctrl], args: [{ type: "f", value: mappedVal }], host: hostStr, port: portStr })
+                            receive(routesMidi.myFirstDeviceFaders[ctrl], mappedValInv)
+                            sendOsc({ address: routesMidi.myFirstDeviceFaders[ctrl], args: [{ type: "f", value: mappedVal }], host: hostStr, port: portStr })
                         }
                     }
-                    else if (routes.myFirstDeviceKnobs[ctrl]) {
-                        receive('/SET', routes.myFirstDeviceKnobs[ctrl], mappedVal2)
+                    else if (routesMidi.myFirstDeviceKnobs[ctrl]) {
+                        receive('/SET', routesMidi.myFirstDeviceKnobs[ctrl], mappedVal2)
                     }
-                    else if (routes.myFirstDeviceBtns[ctrl]) {
-                        receive('/SET', routes.myFirstDeviceBtns[ctrl], value / 127)
+                    else if (routesMidi.myFirstDeviceBtns[ctrl]) {
+                        receive('/SET', routesMidi.myFirstDeviceBtns[ctrl], value / 127)
                     }
                 }
             }
@@ -251,22 +251,22 @@ module.exports = {
 
                     var [channel, ctrl, value] = args.map(arg => arg.value)
 
-                    if (routes.mySecondDeviceControls[ctrl]) {
+                    if (routesMidi.mySecondDeviceControls[ctrl]) {
                         // exceptions
                         if (ctrl != 0 && ctrl != 1 && ctrl != 2 && ctrl != 3 && ctrl != 4 && ctrl != 5 && ctrl != 6 && ctrl != 7) {
                             // prevent double trigger on release
-                            if (value == 127) receive('/SET', routes.mySecondDevice[ctrl], value / 127)
+                            if (value == 127) receive('/SET', routesMidi.mySecondDevice[ctrl], value / 127)
                         } else {
                             var mappedVal3 = scale(value, 0, 127, -5.0, 5.0)
                             var mappedVal4 = scale(value, 0, 127, -2.0, 2.0)
-                            if (ctrl == 0 || ctrl == 2 || ctrl == 4 || ctrl == 6) receive('/SET', routes.mySecondDevice[ctrl], mappedVal3)
-                            else receive('/SET', routes.mySecondDevice[ctrl], mappedVal4)
+                            if (ctrl == 0 || ctrl == 2 || ctrl == 4 || ctrl == 6) receive('/SET', routesMidi.mySecondDevice[ctrl], mappedVal3)
+                            else receive('/SET', routesMidi.mySecondDevice[ctrl], mappedVal4)
                         }
                     }
                 }
 
                 else if (address === '/pitch') {
-                    receive('/SET', routes.mySecondDevicePitch[ctrl], mappedVal2)
+                    receive('/SET', routesMidi.mySecondDevicePitch[ctrl], mappedVal2)
                 }
             }
 
@@ -280,14 +280,13 @@ module.exports = {
         //################################ other incoming OSC commands #####################
 
         // check WHICH external device is sending WHAT (by its IP=WHICH=host and address=WHAT)
-        //console.log(routesExt[host])
-        if (routesExt[host][address]) {
+        //console.log(routesOSC[host])
+        if (routesOSC[host][address]) {
 
             var val = args[0].value
             var mappedVal = scale(val, 0, 1, -0.35, 1.0) // faders alpha
-
-            receive('/SET', routesExt[host][address], mappedVal)
-            //sendOsc({ address: routesExt[host][address], args: [{ type: "f", value: mappedVal }], host: hostStr, port: portStr })
+            receive('/SET', routesOSC[host][address], mappedVal)
+            //sendOsc({ address: routesOSC[host][address], args: [{ type: "f", value: mappedVal }], host: hostStr, port: portStr })
         }
         
 
