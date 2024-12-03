@@ -281,12 +281,14 @@ module.exports = {
 
         // check WHICH external device is sending WHAT (by its IP=WHICH=host and address=WHAT)
         //console.log(routesOSC[host])
-        if (routesOSC[host][address]) {
+        if (routesOSC[host]) {
+            if (routesOSC[host][address]) {
 
-            var val = args[0].value
-            var mappedVal = scale(val, 0, 1, -0.35, 1.0) // faders alpha
-            receive('/SET', routesOSC[host][address], mappedVal)
-            //sendOsc({ address: routesOSC[host][address], args: [{ type: "f", value: mappedVal }], host: hostStr, port: portStr })
+                var val = args[0].value
+                var mappedVal = scale(val, 0, 1, -0.35, 1.0) // faders alpha
+                receive('/SET', routesOSC[host][address], mappedVal)
+                //sendOsc({ address: routesOSC[host][address], args: [{ type: "f", value: mappedVal }], host: hostStr, port: portStr })
+            }
         }
         
 
