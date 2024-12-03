@@ -8,27 +8,12 @@ var vimixBatchAddr = "/vimix/batch#"
 module.exports = {
     '192.168.178.42': {
         '/OSCtest/heartbeat': 'mainMixMat/0',
-        '/OSCtest/': '1/alpha',
+        '/OSCtest/': 'mainMixMat/1',
     },
 
-    'deviceIP02': {
-        '/OSCtest/': 'knobsMat/0',
-        '/OSCtest/': 'knobsMat/1',
-    },
-
-    'deviceIP03': {
-        '/OSCtest/': 'playPauseMat/0',
-        '/OSCtest/': 'playPauseMat/1',
-    },
-
-    'deviceIP04': {
-        '/OSCtest/': 'flashMat/0',
-        '/OSCtest/': 'flashMat/1',
-    },
-
-    'deviceIP05': {
-        '/OSCtest/': '',
-        '/OSCtest/': '',
+    '192.168.178.50': {
+        '/OSCtest/50': 'knobsMat/0',
+        '/OSCtest/50_1': 'knobsMat/1',
     }
 }
 
