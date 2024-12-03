@@ -1,6 +1,7 @@
 const path = nativeRequire('path');
 const fs = nativeRequire('fs');
 var routes = require('./OSC_routingTables/routingExample.js')
+var routesExt = require('./OSC_routingTables/routingExternals.js')
 
 // CHANGE THESE TO YOUR NEEDS!
 var hostStr = "192.168.178.24"
@@ -274,6 +275,25 @@ module.exports = {
 
             return // bypass original message
         }
+
+
+        //################################ other incoming OSC commands #####################
+
+        // check WHICH external device is sending WHAT (by its IP=WHICH=host and address=WHAT)
+        //console.log(routesExt[host])
+        if (routesExt[host][address]) {
+
+            var val = args[0].value
+            var mappedVal = scale(val, 0, 1, -0.35, 1.0) // faders alpha
+
+            receive('/SET', routesExt[host][address], mappedVal)
+            //sendOsc({ address: routesExt[host][address], args: [{ type: "f", value: mappedVal }], host: hostStr, port: portStr })
+        }
+        
+
+        //################################ END of other incoming OSC commands #####################
+
+
         // return data if you want the message to be processed
         return { address, args, host, port }
         //return { data }
